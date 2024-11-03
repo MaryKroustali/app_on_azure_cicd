@@ -3,12 +3,12 @@ name: CI/CD
 on:  # Trigger this workflow manually
   workflow_dispatch:
     inputs:
-      app_name:
+      application:
         description: 'Application name'
         required: true
         default: 'record-store'
       location:
-        description: 'Deployment Location'
+        description: 'Deployment location'
         required: true
         default: 'westeurope'
 
@@ -36,6 +36,6 @@ jobs:
           scope: 'subscription'
           region: ${{ inputs.location }}
           template: ./bicep/main.bicep
-          parameters: ./bicep/main.bicepparam
+          parameters: ./bicep/main.bicepparam application=${{ inputs.application }}
           
 
