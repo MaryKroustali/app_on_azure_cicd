@@ -2,6 +2,11 @@ name: CI/CD
 
 on:  # Trigger this workflow manually
   workflow_dispatch:
+    inputs:
+      app_name:
+        description: 'Application name'
+        required: true
+        default: 'record-store'
 
 permissions:
   id-token: write
@@ -25,7 +30,7 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          # resourceGroupName: ${{ secrets.AZURE_RG }}
+          resourceGroupName: 'rg-${{ inputs.app_name }}'
           template: ./bicep/main.bicep
           parameters: ./bicep/main.bicepparam
           failOnStdErr: false
