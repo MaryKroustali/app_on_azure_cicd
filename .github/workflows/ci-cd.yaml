@@ -7,6 +7,10 @@ on:  # Trigger this workflow manually
         description: 'Application name'
         required: true
         default: 'record-store'
+      location:
+        description: 'Deployment Location'
+        required: true
+        default: 'westeurope'
 
 permissions:
   id-token: write
@@ -30,6 +34,7 @@ jobs:
         uses: azure/arm-deploy@v2
         with:
           scope: 'subscription'
+          region: ${{ inputs.location }}
           template: ./bicep/main.bicep
           parameters: ./bicep/main.bicepparam
           
