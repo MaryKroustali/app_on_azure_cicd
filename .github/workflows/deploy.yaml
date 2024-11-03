@@ -30,7 +30,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: "Checkout repository"
         uses: actions/checkout@main
-      - name: deploy
+      - name: "Deploy in Subscription scope"
         uses: azure/arm-deploy@v2
         with:
           scope: 'subscription'
