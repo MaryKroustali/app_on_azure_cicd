@@ -38,4 +38,16 @@ jobs:
           template: ./bicep/main.bicep
           parameters: ./bicep/main.bicepparam application=${{ inputs.application }}
           
+  import_data_to_db:
+    name: Import Data to SQL Database
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout Record Store App repository"
+        uses: actions/checkout@main
+        with: 
+          repository: MaryKroustali/record_store_app
+          path: record_store_app
+          
+    
+          
 
