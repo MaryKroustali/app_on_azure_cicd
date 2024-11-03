@@ -1,0 +1,19 @@
+name: CI/CD
+
+on:  # Trigger this workflow manually
+  workflow_dispatch:
+
+jobs:
+  azure_login:
+    name: Authenticate to Azure
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          
+
