@@ -1,12 +1,11 @@
-name: CI/CD
+name: Deploy
 
 on:  # Trigger this workflow manually
   workflow_dispatch:
     inputs:
-      application:
+      application: # Overrides 'application' parameter in main.bicepparam
         description: 'Application name'
-        required: true
-        default: 'record-store'
+        required: false
       location:
         description: 'Deployment location'
         required: true
