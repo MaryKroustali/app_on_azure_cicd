@@ -3,6 +3,9 @@ name: CI/CD
 on:  # Trigger this workflow manually
   workflow_dispatch:
 
+permissions:
+  id-token: write
+
 jobs:
   azure_login:
     name: Authenticate to Azure
