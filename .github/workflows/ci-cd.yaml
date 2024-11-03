@@ -3,13 +3,13 @@ name: Deploy
 on:  # Trigger this workflow manually
   workflow_dispatch:
     inputs:
-      application: # Overrides 'application' parameter in main.bicepparam
-        description: 'Application name'
-        required: false
       location:
-        description: 'Deployment location'
+        description: 'Required. Deployment location'
         required: true
         default: 'westeurope'
+      application: # Overrides 'application' parameter in main.bicepparam
+        description: 'Optional. Overrides `application` parameter in main.bicepparam'
+        required: false
 
 permissions:
   id-token: write
