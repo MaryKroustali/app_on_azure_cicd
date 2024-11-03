@@ -7,9 +7,10 @@ on:  # Trigger this workflow manually
         description: 'Required. Deployment location'
         required: true
         default: 'westeurope'
-      application: # Overrides 'application' parameter in main.bicepparam
+      application:
         description: 'Optional. Overrides `application` parameter in main.bicepparam'
-        required: false
+        required: true
+        default: 'record-store'
 
 permissions:
   id-token: write
