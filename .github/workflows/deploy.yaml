@@ -40,14 +40,16 @@ jobs:
           
   import_data_to_db:
     name: Import Data to SQL Database
+    needs: deploy_on_azure # Run only after successful completion of previous job
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Record Store App repository"
         uses: actions/checkout@main
-        with: 
+        with:
           repository: MaryKroustali/record_store_app
           path: record_store_app
-          
-    
-          
-
+      - name: Azure SQL Deploy
+        uses: Azure/sql-action@v2.2.1
+        with:
+          connection-string: 'Server=<servername>;Initial Catalog=chinook; User ID=<user_id>; Password=<password>; Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+          path: record_store_app/SQL/chinook.sql
