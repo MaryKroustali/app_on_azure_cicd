@@ -1,7 +1,7 @@
 using 'main.bicep'
 
-param application = 'record-store' // will be overriden from workflow parameters
-param sql_server_admin_username = 'dbadmin'
+param application = '' // will be overriden from workflow parameters
+param sql_server_admin_username = '' // will be overriden from workflow parameters
 @secure()
-param sql_server_admin_password = 'ABC123!@#ABC'
+param sql_server_admin_password = '' // will be overriden from workflow parameters
 param sql_db_name = 'chinook'
