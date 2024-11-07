@@ -5,6 +5,7 @@ param sql_server_admin_username string
 @secure()
 param sql_server_admin_password string
 param sql_db_name string
+param app_repo_url string
 
 resource rg 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: 'rg-${application}'
@@ -27,6 +28,9 @@ module app 'modules/webapp/app.bicep' = {
   params: {
     app_name: 'app-${application}'
     app_service_plan_id: asp.outputs.id
+    app_runtime_stack: '.NET'
+    app_runtime_version: 'ASP.NET V4.8'
+    app_repo_url: app_repo_url
   }
 }
 
