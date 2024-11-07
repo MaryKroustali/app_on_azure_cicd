@@ -16,33 +16,14 @@ on:  # Trigger this workflow manually
         required: true
         type: string
 
-# permissions:
-permissions: write-all
-  # id-token: write
-  # contents: read
+permissions:
+  id-token: write
+  contents: read
 
-jobs:
-  set_action_secrets:
-    name: Set Action Secrets for SQL admin credentials
-    runs-on: ubuntu-latest
-    steps:
-    - name: Set SQL Admin Username
-      uses: hmanzur/actions-set-secret@v2.0.0
-      with:
-        name: SQL_SERVER_ADMIN_USERNAME
-        value: ${{ inputs.sql_server_admin_username }} 
-        token: ${{ secrets.GITHUB_TOKEN }}
-    - name: Set SQL Admin Password
-      uses: hmanzur/actions-set-secret@v2.0.0
-      with:
-        name: SQL_SERVER_ADMIN_PASSWORD
-        value: ${{ inputs.sql_server_admin_password }}
-        token: ${{ secrets.GITHUB_TOKEN }}
-        
+jobs:        
   deploy_on_azure:
     name: Deploy on Azure
     runs-on: ubuntu-latest
-    needs: set_action_secrets # Run only after successful completion of previous job
     steps:
       - name: "Login to Azure"
         uses: azure/login@v1
@@ -60,7 +41,7 @@ jobs:
           region: 'westeurope'
           template: ./bicep/main.bicep
           # Overwrite values in .bicepparam with input parameters
-          parameters: ./bicep/main.bicepparam application=${{ inputs.application }} sql_server_admin_username=${{ secrets.SQL_SERVER_ADMIN_USERNAME }} sql_server_admin_password=${{ secrets.SQL_SERVER_ADMIN_PASSWORD }}
+          parameters: ./bicep/main.bicepparam application=${{ inputs.application }} sql_server_admin_username=${{ inputs.sql_server_admin_username }} sql_server_admin_password=${{ inputs.sql_server_admin_password }}
           
   import_data_to_db:
     name: Import Data to SQL Database
@@ -75,6 +56,6 @@ jobs:
       - name: Azure SQL Deploy
         uses: Azure/sql-action@v2.2.1
         with:
-          connection-string: 'Server=tcp:sql-${{ inputs.application }}.database.windows.net,1433;Initial Catalog=chinook; User ID=${{ secrets.SQL_SERVER_ADMIN_USERNAME }}; Password=${{ secrets.SQL_SERVER_ADMIN_PASSWORD }}; Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+          connection-string: 'Server=tcp:sql-${{ inputs.application }}.database.windows.net,1433;Initial Catalog=chinook; User ID=${{ inputs.sql_server_admin_username }}; Password=${{ inputs.sql_server_admin_password }}; Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
           path: record_store_app/SQL/chinook.sql
   
