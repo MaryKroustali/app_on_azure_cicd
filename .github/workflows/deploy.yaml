@@ -63,7 +63,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: "Deploy Code to Webapp"
         run: | 
-          az webapp deployment github-actions add --repo "${{ inputs.application_repo }}" --branch main --name app-${{ inputs.application }} --runtime "ASPNET:V4.8" --resource-group rg-${{ inputs.application }} --token ${{ secrets.PAT }} --debug
+          az webapp deployment github-actions add --repo "${{ inputs.application_repo }}" --branch main --name app-${{ inputs.application }} --runtime "ASPNET|V4.8" --resource-group rg-${{ inputs.application }} --token ${{ secrets.PAT }} --debug
           
   # import_data_to_db:
   #   name: Import Data to SQL Database
