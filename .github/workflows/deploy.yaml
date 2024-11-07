@@ -30,13 +30,13 @@ jobs:
       with:
         name: SQL_SERVER_ADMIN_USERNAME
         value: ${{ inputs.sql_server_admin_username }} 
-        token: ${{ secrets.GIT_REPO_ACCESS_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
     - name: Set SQL Admin Password
       uses: jairandresdiazp/action-set-secret@v1
       with:
         name: SQL_SERVER_ADMIN_PASSWORD
         value: ${{ inputs.sql_server_admin_password }}
-        token: ${{ secrets.GIT_REPO_ACCESS_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         
   deploy_on_azure:
     name: Deploy on Azure
