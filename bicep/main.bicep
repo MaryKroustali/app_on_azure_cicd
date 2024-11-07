@@ -5,7 +5,6 @@ param sql_server_admin_username string
 @secure()
 param sql_server_admin_password string
 param sql_db_name string
-param app_repo_url string
 
 resource rg 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: 'rg-${application}'
