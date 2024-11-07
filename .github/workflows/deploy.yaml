@@ -10,7 +10,7 @@ on:  # Trigger this workflow manually
       application_repo:
         description: 'Repository with Application Code'
         required: true
-        default: 'MaryKroustali/record_store_app'
+        default: 'https://github.com/MaryKroustali/record_store_app'
       sql_server_admin_username:
         description: 'Admin Username for SQL server'
         required: true
