@@ -48,6 +48,18 @@ jobs:
     needs: deploy_on_azure
     runs-on: ubuntu-latest
     steps:
+      - name: "Login to Azure"
+        uses: azure/login@v1
+        with:
+          # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: "Enable access for Pipeline Agent"
+        run: | 
+          agentIP=$(curl -s http://ipinfo.io/json | jq '.ip')
+          echo 'Enabling networking access for Pipeline Agent with IP $agentIP'
+          az sql server firewall-rule create --name agent_access --resource-group rg-${{ inputs.application }} --server sql-${{ inputs.application }} --end-ip-address $agentIP --start-ip-address $agentIP
       - name: "Checkout Record Store App repository"
         uses: actions/checkout@main
         with:
