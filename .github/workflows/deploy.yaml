@@ -25,6 +25,8 @@ jobs:
     name: Deploy on Azure
     runs-on: ubuntu-latest
     steps:
+      - name: "Upgrade to latest Bicep version"
+        run: az bicep upgrade
       - name: "Login to Azure"
         uses: azure/login@v1
         with:
