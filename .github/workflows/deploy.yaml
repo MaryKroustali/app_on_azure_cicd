@@ -26,13 +26,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set SQL Admin Username
-      uses: jairandresdiazp/action-set-secret@v1
+      uses: hmanzur/actions-set-secret@v2.0.0
       with:
         name: SQL_SERVER_ADMIN_USERNAME
         value: ${{ inputs.sql_server_admin_username }} 
         token: ${{ secrets.GITHUB_TOKEN }}
     - name: Set SQL Admin Password
-      uses: jairandresdiazp/action-set-secret@v1
+      uses: hmanzur/actions-set-secret@v2.0.0
       with:
         name: SQL_SERVER_ADMIN_PASSWORD
         value: ${{ inputs.sql_server_admin_password }}
