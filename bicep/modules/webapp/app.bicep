@@ -7,13 +7,13 @@ param app_location string = resourceGroup().location
 @description('Resource ID of the associated App Service plan.')
 param app_service_plan_id string
 
-@description('Name of branch to use for deployment.)
+@description('Name of branch to use for deployment.')
 param app_branch string = 'main'
 
-@description('Runtime stack is used to determine the workflow file content for code base apps.)
+@description('Runtime stack is used to determine the workflow file content for code base apps.')
 param app_runtime_stack string
 
-@description('Runtime version is used to determine what build version to set in the workflow file.)
+@description('Runtime version is used to determine what build version to set in the workflow file.')
 param app_runtime_version string
 
 @description('Repository or source control URL.')
