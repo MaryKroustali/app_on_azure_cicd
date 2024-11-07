@@ -47,7 +47,7 @@ jobs:
           region: 'westeurope'
           template: ./bicep/main.bicep
           # Overwrite values in .bicepparam with input parameters
-          parameters: ./bicep/main.bicepparam application=${{ inputs.application }} app_repo_url ${{ inputs.application_repo }} sql_server_admin_username=${{ inputs.sql_server_admin_username }} sql_server_admin_password=${{ inputs.sql_server_admin_password }}
+          parameters: ./bicep/main.bicepparam application=${{ inputs.application }} app_repo_url=${{ inputs.application_repo }} sql_server_admin_username=${{ inputs.sql_server_admin_username }} sql_server_admin_password=${{ inputs.sql_server_admin_password }}
           
   # import_data_to_db:
   #   name: Import Data to SQL Database
