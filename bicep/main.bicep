@@ -28,8 +28,8 @@ module app 'modules/webapp/app.bicep' = {
   params: {
     app_name: 'app-${application}'
     app_service_plan_id: asp.outputs.id
-    app_runtime_stack: 'dotnet'
-    app_runtime_version: 'ASP.NET V4.8'
+    app_runtime_stack: 'dotnetcore'
+    // app_runtime_version: 'ASP.NET V4.8'
     app_repo_url: app_repo_url
   }
 }
