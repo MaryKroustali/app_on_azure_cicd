@@ -16,9 +16,10 @@ on:  # Trigger this workflow manually
         required: true
         type: string
 
-permissions:
-  id-token: write
-  contents: read
+# permissions:
+permissions: write-all
+  # id-token: write
+  # contents: read
 
 jobs:
   set_action_secrets:
