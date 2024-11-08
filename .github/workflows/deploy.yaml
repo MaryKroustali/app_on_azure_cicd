@@ -25,75 +25,93 @@ permissions:
   contents: read
 
 jobs:        
-  deploy_on_azure:
-    name: Deploy on Azure
+  set_action_secrets:
+    name: Set Action Secrets for SQL admin credentials
     runs-on: ubuntu-latest
     steps:
-      - name: "Upgrade to latest Bicep version"
-        run: az bicep upgrade
-      - name: "Login to Azure"
-        uses: azure/login@v1
-        with:
-          # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: "Checkout repository"
-        uses: actions/checkout@main
-      - name: "Deploy in Subscription scope"
-        uses: azure/arm-deploy@v2
-        with:
-          scope: 'subscription'
-          region: 'westeurope'
-          template: ./bicep/main.bicep
-          # Overwrite values in .bicepparam with input parameters
-          parameters: ./bicep/main.bicepparam application=${{ inputs.application }} sql_server_admin_username=${{ inputs.sql_server_admin_username }} sql_server_admin_password=${{ inputs.sql_server_admin_password }}
+    - name: Set SQL Admin Username
+      uses: jairandresdiazp/action-set-secret@v1
+      with:
+        name: SQL_SERVER_ADMIN_USERNAME
+        value: ${{ inputs.sql_server_admin_username }} 
+        token: ${{ secrets.PAT }}
+    - name: Set SQL Admin Password
+      uses: jairandresdiazp/action-set-secret@v1
+      with:
+        name: SQL_SERVER_ADMIN_PASSWORD
+        value: ${{ inputs.sql_server_admin_password }} 
+        token: ${{ secrets.PAT }}
+        
+  # deploy_on_azure:
+  #   name: Deploy on Azure
+  #   needs: set_action_secrets
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Upgrade to latest Bicep version"
+  #       run: az bicep upgrade
+  #     - name: "Login to Azure"
+  #       uses: azure/login@v1
+  #       with:
+  #         # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     - name: "Checkout repository"
+  #       uses: actions/checkout@main
+  #     - name: "Deploy in Subscription scope"
+  #       uses: azure/arm-deploy@v2
+  #       with:
+  #         scope: 'subscription'
+  #         region: 'westeurope'
+  #         template: ./bicep/main.bicep
+  #         # Overwrite values in .bicepparam with input parameters
+  #         parameters: ./bicep/main.bicepparam application=${{ inputs.application }} sql_server_admin_username=${{ inputs.sql_server_admin_username }} sql_server_admin_password=${{ inputs.sql_server_admin_password }}
   
-  webapp_source_config:
-    name: Configure Source Code for WebApp
-    needs: deploy_on_azure
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Login to Azure"
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: "Deploy Code to Webapp"
-        run: | 
-          az webapp deployment source config --resource-group rg-${{ inputs.application }} --name app-${{ inputs.application }} --repository-type externalgit --repo-url https://github.com/${{ inputs.application_repo }} --branch main          
+  # webapp_source_config:
+  #   name: Configure Source Code for WebApp
+  #   needs: deploy_on_azure
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Login to Azure"
+  #       uses: azure/login@v1
+  #       with:
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     - name: "Deploy Code to Webapp"
+  #       run: | 
+  #         az webapp deployment source config --resource-group rg-${{ inputs.application }} --name app-${{ inputs.application }} --repository-type externalgit --repo-url https://github.com/${{ inputs.application_repo }} --branch main          
           
-  import_data_to_db:
-    name: Import Data to SQL Database
-    needs: deploy_on_azure
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Login to Azure"
-        uses: azure/login@v1
-        with:
-          # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: "Enable access for Pipeline Agent"
-        run: | 
-          agentIP=$(curl -s http://ipinfo.io/json | jq -r '.ip')
-          echo "Enabling networking access for Pipeline Agent with IP $agentIP"
-          az sql server firewall-rule create --name agent_access --resource-group rg-${{ inputs.application }} --server sql-${{ inputs.application }} --end-ip-address $agentIP --start-ip-address $agentIP
-      - name: "Checkout Record Store App repository"
-        uses: actions/checkout@main
-        with:
-          repository: MaryKroustali/record_store_app
-          path: record_store_app
-      - name: Azure SQL Deploy
-        uses: Azure/sql-action@v2.2.1
-        with:
-          connection-string: 'Server=tcp:sql-${{ inputs.application }}.database.windows.net,1433;Initial Catalog=chinook; User ID=${{ inputs.sql_server_admin_username }}; Password=${{ inputs.sql_server_admin_password }}; Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-          path: record_store_app/SQL/chinook.sql
-      - name: "Disable access for Pipeline Agent"
-        run: | 
-          agentIP=$(curl -s http://ipinfo.io/json | jq -r '.ip')
-          echo "Disabling networking access for Pipeline Agent with IP $agentIP"
-          az sql server firewall-rule create --name agent_access --resource-group rg-${{ inputs.application }} --server sql-${{ inputs.application }}
+  # import_data_to_db:
+  #   name: Import Data to SQL Database
+  #   needs: deploy_on_azure
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Login to Azure"
+  #       uses: azure/login@v1
+  #       with:
+  #         # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     - name: "Enable access for Pipeline Agent"
+  #       run: | 
+  #         agentIP=$(curl -s http://ipinfo.io/json | jq -r '.ip')
+  #         echo "Enabling networking access for Pipeline Agent with IP $agentIP"
+  #         az sql server firewall-rule create --name agent_access --resource-group rg-${{ inputs.application }} --server sql-${{ inputs.application }} --end-ip-address $agentIP --start-ip-address $agentIP
+  #     - name: "Checkout Record Store App repository"
+  #       uses: actions/checkout@main
+  #       with:
+  #         repository: MaryKroustali/record_store_app
+  #         path: record_store_app
+  #     - name: Azure SQL Deploy
+  #       uses: Azure/sql-action@v2.2.1
+  #       with:
+  #         connection-string: 'Server=tcp:sql-${{ inputs.application }}.database.windows.net,1433;Initial Catalog=chinook; User ID=${{ inputs.sql_server_admin_username }}; Password=${{ inputs.sql_server_admin_password }}; Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+  #         path: record_store_app/SQL/chinook.sql
+  #     - name: "Disable access for Pipeline Agent"
+  #       run: | 
+  #         agentIP=$(curl -s http://ipinfo.io/json | jq -r '.ip')
+  #         echo "Disabling networking access for Pipeline Agent with IP $agentIP"
+  #         az sql server firewall-rule create --name agent_access --resource-group rg-${{ inputs.application }} --server sql-${{ inputs.application }}
   
