@@ -29,10 +29,11 @@ jobs:
     name: Set Action Secrets for SQL admin credentials
     runs-on: ubuntu-latest
     steps:
-    - run: |
-        gh secret set MYSECRET --body "test"
-      env:
+    - env:
         GH_TOKEN: ${{ github.token }}
+      run: |
+        gh secret set MYSECRET --body "test"
+      
     # - name: Set SQL Admin Username
     #   uses: pierluigi/repository-secret-javascript-action@v1
     #   with:
