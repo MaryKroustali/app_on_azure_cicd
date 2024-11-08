@@ -25,35 +25,12 @@ permissions:
   contents: read
 
 jobs:        
-  # deploy_on_azure:
-  #   name: Deploy on Azure
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: "Upgrade to latest Bicep version"
-  #       run: az bicep upgrade
-  #     - name: "Login to Azure"
-  #       uses: azure/login@v1
-  #       with:
-  #         # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
-  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
-  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  #     - name: "Checkout repository"
-  #       uses: actions/checkout@main
-  #     - name: "Deploy in Subscription scope"
-  #       uses: azure/arm-deploy@v2
-  #       with:
-  #         scope: 'subscription'
-  #         region: 'westeurope'
-  #         template: ./bicep/main.bicep
-  #         # Overwrite values in .bicepparam with input parameters
-  #         parameters: ./bicep/main.bicepparam application=${{ inputs.application }} sql_server_admin_username=${{ inputs.sql_server_admin_username }} sql_server_admin_password=${{ inputs.sql_server_admin_password }}
-  
-  configure_cicd_webapp:
-    name: Configure CI/CD for WebApp
-    # needs: deploy_on_azure
+  deploy_on_azure:
+    name: Deploy on Azure
     runs-on: ubuntu-latest
     steps:
+      - name: "Upgrade to latest Bicep version"
+        run: az bicep upgrade
       - name: "Login to Azure"
         uses: azure/login@v1
         with:
@@ -61,9 +38,32 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: "Deploy Code to Webapp"
-        run: | 
-          az webapp deployment github-actions add --repo "${{ inputs.application_repo }}" --branch main --name app-${{ inputs.application }} --runtime "dotnet|6" --resource-group rg-${{ inputs.application }} --token ${{ secrets.PAT }} --debug
+      - name: "Checkout repository"
+        uses: actions/checkout@main
+      - name: "Deploy in Subscription scope"
+        uses: azure/arm-deploy@v2
+        with:
+          scope: 'subscription'
+          region: 'westeurope'
+          template: ./bicep/main.bicep
+          # Overwrite values in .bicepparam with input parameters
+          parameters: ./bicep/main.bicepparam application=${{ inputs.application }} sql_server_admin_username=${{ inputs.sql_server_admin_username }} sql_server_admin_password=${{ inputs.sql_server_admin_password }}
+  
+  # configure_cicd_webapp:
+  #   name: Configure CI/CD for WebApp
+  #   # needs: deploy_on_azure
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Login to Azure"
+  #       uses: azure/login@v1
+  #       with:
+  #         # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
+  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
+  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     - name: "Deploy Code to Webapp"
+  #       run: | 
+  #         az webapp deployment github-actions add --repo "${{ inputs.application_repo }}" --branch main --name app-${{ inputs.application }} --runtime "dotnet|6" --resource-group rg-${{ inputs.application }} --token ${{ secrets.PAT }} --debug
           
   # import_data_to_db:
   #   name: Import Data to SQL Database
