@@ -31,6 +31,8 @@ jobs:
     steps:
     - run: |
         gh secret set MYSECRET --body "test"
+      env:
+        GH_TOKEN: ${{ github.token }}
     # - name: Set SQL Admin Username
     #   uses: pierluigi/repository-secret-javascript-action@v1
     #   with:
