@@ -11,66 +11,35 @@ on:  # Trigger this workflow manually
         description: 'Repository with Application Code'
         required: true
         default: 'MaryKroustali/record_store_app'
-      sql_server_admin_username:
-        description: 'Admin Username for SQL server'
-        required: true
-        default: 'dbadmin'
-      sql_server_admin_password: 
-        description: 'Admin Password for SQL server'
-        required: true
-        type: string
 
 permissions:
   id-token: write
   contents: read
 
-jobs:        
-  set_action_secrets:
-    name: Set Action Secrets for SQL admin credentials
+jobs:                  
+  deploy_on_azure:
+    name: Deploy on Azure
     runs-on: ubuntu-latest
     steps:
-    - env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        gh secret set MYSECRET --body "test"
-      
-    # - name: Set SQL Admin Username
-    #   uses: pierluigi/repository-secret-javascript-action@v1
-    #   with:
-    #     name: SQL_SERVER_ADMIN_USERNAME
-    #     value: ${{ inputs.sql_server_admin_username }} 
-    #     token: ${{ secrets.PAT }}
-    # - name: Set SQL Admin Password
-    #   uses: action-pack/set-secret@v1
-    #   with:
-    #     name: SQL_SERVER_ADMIN_PASSWORD
-    #     value: ${{ inputs.sql_server_admin_password }} 
-    #     token: ${{ secrets.PAT }}
-        
-  # deploy_on_azure:
-  #   name: Deploy on Azure
-  #   needs: set_action_secrets
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: "Upgrade to latest Bicep version"
-  #       run: az bicep upgrade
-  #     - name: "Login to Azure"
-  #       uses: azure/login@v1
-  #       with:
-  #         # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
-  #         client-id: ${{ secrets.AZURE_CLIENT_ID }}
-  #         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-  #         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  #     - name: "Checkout repository"
-  #       uses: actions/checkout@main
-  #     - name: "Deploy in Subscription scope"
-  #       uses: azure/arm-deploy@v2
-  #       with:
-  #         scope: 'subscription'
-  #         region: 'westeurope'
-  #         template: ./bicep/main.bicep
-  #         # Overwrite values in .bicepparam with input parameters
-  #         parameters: ./bicep/main.bicepparam application=${{ inputs.application }} sql_server_admin_username=${{ inputs.sql_server_admin_username }} sql_server_admin_password=${{ inputs.sql_server_admin_password }}
+      - name: "Upgrade to latest Bicep version"
+        run: az bicep upgrade
+      - name: "Login to Azure"
+        uses: azure/login@v1
+        with:
+          # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: "Checkout repository"
+        uses: actions/checkout@main
+      - name: "Deploy in Subscription scope"
+        uses: azure/arm-deploy@v2
+        with:
+          scope: 'subscription'
+          region: 'westeurope'
+          template: ./bicep/main.bicep
+          # Overwrite values in .bicepparam with input parameters
+          parameters: ./bicep/main.bicepparam application=${{ inputs.application }} sql_server_admin_username=${{ secrets.SQL_SERVER_ADMIN_USERNAME }} sql_server_admin_password=${{ secrets.SQL_SERVER_ADMIN_PASSWORD }}
   
   # webapp_source_config:
   #   name: Configure Source Code for WebApp
