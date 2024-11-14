@@ -18,6 +18,7 @@ on:  # Trigger this workflow manually
 
 permissions:
   id-token: write
+  contents: read
 
 jobs:
   import_data_to_db:
