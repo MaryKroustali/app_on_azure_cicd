@@ -1,0 +1,28 @@
+name: Deploy
+
+on:  # Trigger this workflow manually
+  workflow_dispatch:
+    inputs:
+      application:
+        description: 'Application Workload'
+        required: true
+        default: 'record-store'
+      application_repo:
+        description: 'Repository with Application Code'
+        required: true
+        default: 'MaryKroustali/record_store_app'
+
+jobs:
+  webapp_source_config:
+    name: Configure Source Code for WebApp
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Login to Azure"
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: "Deploy Code to Webapp"
+        run: | 
+          az webapp deployment source config --resource-group rg-${{ inputs.application }} --name app-${{ inputs.application }} --repository-type externalgit --repo-url https://github.com/${{ inputs.application_repo }} --branch main          
