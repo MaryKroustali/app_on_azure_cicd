@@ -8,10 +8,6 @@ on:  # Trigger this workflow manually
         required: true
         default: 'record-store'
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:                  
   deploy_on_azure:
     name: Deploy Infrastructure
