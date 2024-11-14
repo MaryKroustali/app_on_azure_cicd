@@ -46,7 +46,7 @@ jobs:
         uses: Azure/sql-action@v2.2.1
         with:
           connection-string: 'Server=tcp:sql-${{ inputs.application }}.database.windows.net,1433;Initial Catalog=${{ inputs.database }}; User ID=${{ secrets.SQL_SERVER_ADMIN_USERNAME }}; Password=${{ secrets.SQL_SERVER_ADMIN_PASSWORD }}; Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-          path: record_store_app/SQL/${{ inputs.database }}k.sql
+          path: record_store_app/SQL/${{ inputs.database }}.sql
       - name: "Disable networking access for Pipeline Agent"
         run: | 
           agentIP=$(curl -s http://ipinfo.io/json | jq -r '.ip')
