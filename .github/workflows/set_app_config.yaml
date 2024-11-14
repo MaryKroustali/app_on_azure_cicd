@@ -1,4 +1,4 @@
-name: Deploy
+name: Set Application Source Code
 
 on:  # Trigger this workflow manually
   workflow_dispatch:
