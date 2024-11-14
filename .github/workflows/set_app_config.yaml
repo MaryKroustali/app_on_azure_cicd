@@ -15,6 +15,9 @@ on:  # Trigger this workflow manually
         description: 'Repository Branch with Application Code'
         required: true
         default: 'main'
+
+permissions:
+  id-token: write
       
 jobs:
   webapp_source_config:
