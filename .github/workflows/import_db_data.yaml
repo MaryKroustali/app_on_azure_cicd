@@ -16,6 +16,9 @@ on:  # Trigger this workflow manually
         required: true
         default: 'chinook'
 
+permissions:
+  id-token: write
+
 jobs:
   import_data_to_db:
     name: Import Data to SQL Database
