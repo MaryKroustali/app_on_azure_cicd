@@ -1,4 +1,4 @@
-name: Deploy
+name: Import Data to Database
 
 on:  # Trigger this workflow manually
   workflow_dispatch:
