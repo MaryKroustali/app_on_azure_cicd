@@ -7,11 +7,15 @@ on:  # Trigger this workflow manually
         description: 'Application Workload'
         required: true
         default: 'record-store'
-      application_repo:
-        description: 'Repository with Application Code'
+      application_repo_url:
+        description: 'Repository URL with Application Code'
         required: true
-        default: 'MaryKroustali/record_store_app'
-
+        default: 'https://github.com/MaryKroustali/record_store_app'
+      application_repo_branch:
+        description: 'Repository Branch with Application Code'
+        required: true
+        default: 'main'
+      
 jobs:
   webapp_source_config:
     name: Configure Source Code for WebApp
@@ -20,9 +24,10 @@ jobs:
       - name: "Login to Azure"
         uses: azure/login@v1
         with:
+          # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: "Deploy Code to Webapp"
+      - name: "Deploy Repository Code to Webapp"
         run: | 
-          az webapp deployment source config --resource-group rg-${{ inputs.application }} --name app-${{ inputs.application }} --repository-type externalgit --repo-url https://github.com/${{ inputs.application_repo }} --branch main          
+          az webapp deployment source config --resource-group rg-${{ inputs.application }} --name app-${{ inputs.application }} --repository-type externalgit --repo-url ${{ inputs.application_repo_url }} --branch ${{ inputs.application_repo_branch }}          
