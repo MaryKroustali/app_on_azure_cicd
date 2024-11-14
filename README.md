@@ -9,7 +9,6 @@ To enable authentication from GitHub to Azure, set up Open ID connect as describ
 - `AZURE_CLIENT_ID`: Client ID for Azure authentication.
 - `AZURE_TENANT_ID`: Tenant ID for the Azure subscription.
 - `AZURE_SUBSCRIPTION_ID`: Subscription ID for Azure.
-And they are reffered in pipeline using ${{ secrets.`secret_name` }}
 
 Additionally, the following secrets for Azure SQL Server authentication should be set:
 - `SQL_SERVER_ADMIN_PASSWORD`: Admin username for Azure SQL Server.
