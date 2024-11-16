@@ -1,4 +1,4 @@
-name: Deploy Application
+name: Deploy Application Code
 
 on:  # Trigger this workflow manually
   workflow_dispatch:
@@ -20,8 +20,8 @@ permissions:
   id-token: write
       
 jobs:
-  webapp_source_config:
-    name: Configure Source Code for WebApp
+  deploy_app_code:
+    name: Deploy Application Source Code to WebApp
     runs-on: ubuntu-latest
     steps:
       - name: "Login to Azure"
