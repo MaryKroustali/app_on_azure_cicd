@@ -1,4 +1,4 @@
-name: Deploy Application in Webapp
+name: Deploy Application
 
 on:  # Trigger this workflow manually
   workflow_dispatch:
