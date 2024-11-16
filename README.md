@@ -2,7 +2,7 @@
 This repository automates the deployment of the [Record Store Application](https://github.com/MaryKroustali/record_store_app) on Azure using Bicep from [App on Azure repository](https://github.com/MaryKroustali/app_on_azure_cicd). Workflows located at [.github/workflows/](.github/workflows/):
   - [Deploy Infrastructure](.github/workflows/deploy_infra.yaml): Provisions the required infrastructure on Azure, including compute and database resources.
   - [Import Data to Database](.github/workflows/import_db_data.yaml): Automates the setup of Azure SQL Database with predefined data from a `.sql` file.
-  - [Deploy Application](.github/workflows/set_app_config.yaml): Configures the Azure Web App with the application’s code to enable deployment.
+  - [Deploy Application Code](.github/workflows/deploy_app_code.yaml): Configures the Azure Web App with the application’s code to enable deployment.
 
 ### Authentication to Azure
 To enable authentication from GitHub to Azure, set up Open ID connect as described in [Azure Login with OpenID Connect](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites). The following repository secrets should be configured under **Repository Settings > Secrets and Variables > Actions > New Repository Secret**:
