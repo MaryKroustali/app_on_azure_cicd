@@ -10,7 +10,7 @@ on:  # Trigger this workflow manually
       application_repo_url:
         description: 'Repository URL with Application Code'
         required: true
-        default: 'https://github.com/MaryKroustali/record_store_app'
+        default: 'MaryKroustali/record_store_app'
       application_repo_branch:
         description: 'Repository Branch with Application Code'
         required: true
