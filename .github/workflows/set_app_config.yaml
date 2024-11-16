@@ -1,4 +1,4 @@
-name: Set Application Source Code
+name: Deploy Application in Webapp
 
 on:  # Trigger this workflow manually
   workflow_dispatch:
@@ -7,14 +7,14 @@ on:  # Trigger this workflow manually
         description: 'Application Workload'
         required: true
         default: 'record-store'
-      application_repo_url:
-        description: 'Repository URL with Application Code'
+      application_repo:
+        description: 'Repository with Application Code'
         required: true
         default: 'MaryKroustali/record_store_app'
-      application_repo_branch:
-        description: 'Repository Branch with Application Code'
+      application_repo_folder:
+        description: 'Folder with Application Code'
         required: true
-        default: 'main'
+        default: 'WebApplication8/'
 
 permissions:
   id-token: write
@@ -31,33 +31,13 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          
       - name: "Checkout Application repository"
         uses: actions/checkout@main
         with:
-          repository: ${{ inputs.application_repo_url }}
-          path: record_store_app
-          
-      # - name: Install Nuget
-      #   uses: nuget/setup-nuget@v1
-      #   with:
-      #     nuget-version: ${{ env.NUGET_VERSION}}
-          
-      # - name: NuGet to restore dependencies as well as project-specific tools that are specified in the project file
-      #   run: nuget restore
-    
-      # - name: Add msbuild to PATH
-      #   uses: microsoft/setup-msbuild@v1.0.2
-  
-      # - name: Run MSBuild
-      #   run: msbuild .\SampleWebApplication.sln
-      
-      - name: 'Run Azure webapp deploy action using publish profile credentials'
+          repository: ${{ inputs.application_repo }}
+          path: record_store_app      
+      - name: "Deploy application code in Azure webapp"
         uses: azure/webapps-deploy@v3
         with: 
-          app-name: app-record-store  # Replace with your app name
-          package: record_store_app/WebApplication8/
-          
-      # - name: "Deploy Repository Code to Webapp"
-      #   run: | 
-      #     az webapp deployment source config --resource-group rg-${{ inputs.application }} --name app-${{ inputs.application }} --repository-type externalgit --repo-url ${{ inputs.application_repo_url }} --branch ${{ inputs.application_repo_branch }}          
+          app-name: app-${{ inputs.application }}
+          package: record_store_app/${{ inputs.application_repo_folder }}
