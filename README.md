@@ -1,5 +1,5 @@
 ## CI/CD Automation for Deploying an App on Azure
-This repository automates the deployment of the [Record Store Application](https://github.com/MaryKroustali/record_store_app) on Azure using Bicep from [App on Azure repository](https://github.com/MaryKroustali/app_on_azure_cicd). Workflows located at [.github/workflows/](.github/workflows/):
+This repository automates the [Bicep deployment](https://github.com/MaryKroustali/app_on_azure_iac) of the [Record Store Application](https://github.com/MaryKroustali/record_store_app) on Azure using GitHub Actions. Workflows located at [.github/workflows/](.github/workflows/):
   - [Deploy Infrastructure](.github/workflows/deploy_infra.yaml): Provisions the required infrastructure on Azure, including compute and database resources.
   - [Import Data to Database](.github/workflows/import_db_data.yaml): Automates the setup of Azure SQL Database with predefined data from a `.sql` file.
   - [Deploy Application Code](.github/workflows/deploy_app_code.yaml): Configures the Azure Web App with the application’s code to enable deployment.
