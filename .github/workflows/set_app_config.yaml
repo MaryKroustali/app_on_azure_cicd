@@ -28,19 +28,36 @@ jobs:
         uses: azure/login@v1
         with:
           # Set secrets value as described in https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites
-          client-id: e4f1941c-f77f-4648-af2e-0c98e3a39c70 # ${{ secrets.AZURE_CLIENT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          
       - name: "Checkout Application repository"
         uses: actions/checkout@main
         with:
           repository: ${{ inputs.application_repo_url }}
           path: record_store_app
+          
+      # - name: Install Nuget
+      #   uses: nuget/setup-nuget@v1
+      #   with:
+      #     nuget-version: ${{ env.NUGET_VERSION}}
+          
+      # - name: NuGet to restore dependencies as well as project-specific tools that are specified in the project file
+      #   run: nuget restore
+    
+      # - name: Add msbuild to PATH
+      #   uses: microsoft/setup-msbuild@v1.0.2
+  
+      # - name: Run MSBuild
+      #   run: msbuild .\SampleWebApplication.sln
+      
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         uses: azure/webapps-deploy@v3
         with: 
           app-name: app-record-store  # Replace with your app name
-          package: record_store_app
+          package: record_store_app/WebApplication8/
+          
       # - name: "Deploy Repository Code to Webapp"
       #   run: | 
       #     az webapp deployment source config --resource-group rg-${{ inputs.application }} --name app-${{ inputs.application }} --repository-type externalgit --repo-url ${{ inputs.application_repo_url }} --branch ${{ inputs.application_repo_branch }}          
