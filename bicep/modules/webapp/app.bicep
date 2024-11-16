@@ -14,6 +14,7 @@ resource app_service 'Microsoft.Web/sites@2023-12-01' = {
     serverFarmId: app_service_plan_id
     siteConfig: {
       windowsFxVersion: 'ASPNET|V4.8'
+      netFrameworkVersion: 'v4.0'
     }
   }
 }
