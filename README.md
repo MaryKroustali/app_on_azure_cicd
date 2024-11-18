@@ -17,4 +17,4 @@ Additionally, the following secrets for Azure SQL Server authentication should b
 In workflows, these secrets are referenced using `${{ secrets.secret_name }}`.
 
 ## Next Steps
-[private_app_on_azure](private_app_on_azure): Deploying the Record Store application on Azure with private connectivity.
+[private_app_on_azure](https://github.com/MaryKroustali/private_app_on_azure): Deploying the Record Store application on Azure with advanced networking and resource configurations.
