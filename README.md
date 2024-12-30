@@ -4,6 +4,8 @@ This repository automates the [Bicep deployment](https://github.com/MaryKroustal
   - [Import Data to Database](.github/workflows/import_db_data.yaml): Automates the setup of Azure SQL Database with predefined data from a `.sql` file.
   - [Deploy Application Code](.github/workflows/deploy_app_code.yaml): Configures the Azure Web App with the application’s code to enable deployment.
 
+[![Deploy Infrastructure](https://github.com/MaryKroustali/app_on_azure_cicd/actions/workflows/deploy_infra.yaml/badge.svg)](https://github.com/MaryKroustali/app_on_azure_cicd/actions/workflows/deploy_infra.yaml)  [![Deploy Application Code](https://github.com/MaryKroustali/app_on_azure_cicd/actions/workflows/deploy_app_code.yaml/badge.svg)](https://github.com/MaryKroustali/app_on_azure_cicd/actions/workflows/deploy_app_code.yaml) [![Import Data to Database](https://github.com/MaryKroustali/app_on_azure_cicd/actions/workflows/import_db_data.yaml/badge.svg)](https://github.com/MaryKroustali/app_on_azure_cicd/actions/workflows/import_db_data.yaml)
+
 ### Authentication to Azure
 To enable authentication from GitHub to Azure, set up Open ID connect as described in [Azure Login with OpenID Connect](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect#prerequisites). The following repository secrets should be configured under **Repository Settings > Secrets and Variables > Actions > New Repository Secret**:
 - `AZURE_CLIENT_ID`: Client ID for Azure authentication.
